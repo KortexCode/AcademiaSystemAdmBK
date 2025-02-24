@@ -1,0 +1,36 @@
+{
+  "name": "academiasystemadmbk",
+  "version": "1.0.0",
+  "description": "Backend para la sistema de base de datos para la academia de baile",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/src/index.js\"",
+    "typescript": "tsc --watch",
+    "test-dev": "npm run build && node dist/index.js",
+    "start": "nodemon dist/src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.48.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.3",
+    "pg-hstore": "^2.3.4",
+    "postgres": "^3.4.5",
+    "sequelize": "^6.37.5",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.2",
+    "typescript": "^5.7.3"
+  }
+}
