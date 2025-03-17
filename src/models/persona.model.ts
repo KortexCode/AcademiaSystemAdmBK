@@ -4,7 +4,12 @@ import { sequelize } from "../db/connection";
 const personaModel = sequelize.define(
   "personas",
   {
-    // Model attributes are defined here
+    id_persona: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
+    },
     nombre: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -39,7 +44,7 @@ const personaModel = sequelize.define(
     },
     patologia: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     fecha_de_registro: {
       type: DataTypes.DATE,

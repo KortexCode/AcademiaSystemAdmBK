@@ -1,21 +1,19 @@
 import { Response, Request } from "express";
 import { personaModel } from "../models/persona.model";
 import { json } from "sequelize";
+import { aprendizModel } from "../models/aprendizModel";
 
-//Obtener todas las personas
-export const getPersonas = async (req: Request, res: Response) => {
+//Obtener todos los aprendices
+export const getAprendices = async (req: Request, res: Response) => {
   try {
-    const personas = await personaModel.findAll();
-    if (personas) {
+    const aprendices = await aprendizModel.findAll({
+      include: "persona",
+    });
+    if (aprendices) {
       res.json({
         status: true,
-        message: "Búsqueda de personas exitosa",
-        data: personas,
-      });
-    } else {
-      res.json({
-        status: false,
-        message: "No se encontraron registros de personas",
+        message: "Búsqueda de aprendices exitosa",
+        data: aprendices,
       });
     }
   } catch (error) {
@@ -23,21 +21,21 @@ export const getPersonas = async (req: Request, res: Response) => {
   }
 };
 
-//Obtener una persona
-export const getPersona = async (req: Request, res: Response) => {
+//Obtener un Aprendiz
+export const getAprendiz = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const persona = await personaModel.findByPk(id);
-    if (persona) {
+    const aprendiz = await personaModel.findByPk(id, {
+      include: "persona",
+    });
+    if (aprendiz) {
       return res.json({
         status: true,
-        message: `Búsque de persona con id ${id} exitosa`,
-        data: persona,
+        message: `El aprendiz ${aprendiz}`,
       });
     } else {
       return res.status(404).json({
-        status: false,
-        message: `No se encontró a la persona con id ${id}`,
+        msg: `Product not found with ${id}`,
       });
     }
   } catch (error) {
