@@ -7,7 +7,8 @@ import { routerApi } from "../routes";
 import { config } from "../../config/config";
 import { personaModel } from "./persona.model";
 import { aprendizModel } from "./aprendizModel";
-import { profesorModel } from "./profesorModel";
+import { profesorModel } from "./profesor.model";
+import { loginModel } from "./login.model";
 
 //Creación de la clase server
 export default class Server {
@@ -50,8 +51,9 @@ export default class Server {
     } catch (error) {
       console.error("Unable to connect to the database:", error);
     }
-    personaModel.sync();
-    aprendizModel.sync();
-    profesorModel.sync();
+    await personaModel.sync();
+    await aprendizModel.sync();
+    await profesorModel.sync();
+    await loginModel.sync();
   }
 }

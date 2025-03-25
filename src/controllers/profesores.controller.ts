@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import { profesorModel } from "../models/profesor.model";
 
+
 export const getProfesores = async (req: Request, res: Response) => {
   try {
     console.log("ENTRANDO A CONSULTA")
@@ -23,10 +24,10 @@ export const getProfesores = async (req: Request, res: Response) => {
 };
 
 export const getProfesor = async (req: Request, res: Response) => {
-  const id = req.params;
+  const id: any = req.params;
   try {
     const profesor = await profesorModel.findByPk(id, {
-      include: "persona",
+      include: 'persona',
     });
 
     if (profesor) {
@@ -39,7 +40,7 @@ export const getProfesor = async (req: Request, res: Response) => {
     }
   } catch (error) {
     res.status(400).json({
-      message: "Error en el servidor al realizar la consulta"
+      message: "Error en el servidor al realizar la consulta",
       error: error,
     })
   }
