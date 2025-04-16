@@ -1,10 +1,13 @@
 import { Response, Request } from "express";
 import bcrypt from "bcrypt";
-
 import jwt from "jsonwebtoken";
-
 import { loginModel } from "../models/login.model";
+import { usersModel } from "../models/users.model";
 import { config } from "../../config/config";
+import { generadorCodigos } from "../utils/generador_de_codigos";
+import { transporter } from "../utils/mailer";
+import { codigosModel } from "../models/codigos.model";
+import { Op } from "sequelize";
 
 //Inciar sección
 export const postLoginInit = async (req: Request, res: Response) => {
@@ -42,12 +45,12 @@ export const postLoginInit = async (req: Request, res: Response) => {
         res.json({
           token,
           status: "true",
-          message: `Inicio de sesión Válido.`,
+          message: `Inicio de sesión exitoso.`,
         });
       } else {
         res.json({
           status: "false",
-          message: "La contraseña inválida",
+          message: "La contraseña es inválida",
         });
       }
     } else {
@@ -57,8 +60,8 @@ export const postLoginInit = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    res.status(404).json({
-      message: "Error de servidor",
+    res.status(500).json({
+      message: "Error en el servidor, comuniquese con soporte",
       error,
     });
   }
@@ -180,4 +183,120 @@ export const putForgotPassword = async (req: Request, res: Response) => {
     });
   }
 };
+//Validar usuario
+export const postUserValidate = async (req: Request, res: Response) => {
+  const { numero_documento } = req.body;
+  console.log("El numero de documento es: ", numero_documento);
+  try {
+    const userFounded = await usersModel.findOne({
+      where: {
+        numero_documento,
+      },
+    });
+    if (userFounded) {
+      res.json({
+        status: "true",
+        message: `El usuario ${numero_documento} existe`,
+      });
+    } else {
+      res.json({
+        status: "false",
+        message: `El usuario ${numero_documento} no existe`,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Error de servidor",
+      error,
+    });
+  }
+};
+//Validar correo
+export const postEmailValidate = async (req: Request, res: Response) => {
+  try {
+    const { user_name, fha_genera } = req.body;
+    console.log("username", user_name);
+
+    const user: any = await usersModel.findOne({ attributes: ['correo'], where: { numero_documento: user_name } });
+    
+    if (user) {
+      const codigoGenerado = generadorCodigos.generarCodigo();
+
+      const correo = user.correo;
+
+      const inserCodigo = {
+        codigo: codigoGenerado,
+        correo,
+        user_name,
+        estado_codigo: false,
+        fha_genera,
+      }
+      //Crear el código en la base de datos
+      await codigosModel.create(inserCodigo);
+      try {
+        // // Enviar el correo usando el transporter
+        await transporter.sendMail({
+          from: '"Tu Aplicación" <academia_system@gmail.com>',
+          to: correo,
+          subject: 'Código de Verificación',
+          text: `Tu código de verificación es: ${codigoGenerado}`,
+          html: `<p>Tu código de verificación es: <strong>${codigoGenerado}</strong></p>`,
+        });
+
+        res.json({ status: 'true', message: `Se ha enviado al correo ${correo}, el código de validación.` });
+
+      } catch (emailError:any) {
+        console.error('Error al enviar correo:', emailError);
+
+        let errorMessage = 'Error al enviar el correo de verificación.';
+
+        if (emailError.code === 'EAUTH') {
+          errorMessage = 'Error de autenticación con el servidor de correo.';
+        } else if (emailError.code === 'ESOCKET' || emailError.code === 'ECONNECTION') {
+          errorMessage = 'Error de conexión con el servidor de correo.';
+        } else if (emailError.code === 'EENVELOPE') {
+          errorMessage = 'La dirección de correo destino no es válida.';
+        }
+
+        res.status(500).json({
+          message: errorMessage,
+          emailError,
+        });
+      }
+
+    } else {
+      res.json({ status: 'false', message: `El correo del ${user_name} , no fue encontrado.` })
+    }
+  } catch (error:any) {
+    res.status(500).json({
+      message: "Error en el servidor, por favor comuniquese con soporte",
+      error: error.message,
+    })
+  }
+}
+//Validar código
+export const postCodeValidate = async (req: Request, res: Response) => {
+  try {
+
+      const {codigo} = req.body;
+      const estado = false;
+      console.log("verificar codigo", codigo);
+      const result: any = await codigosModel.findOne({ where: { [Op.and]: [{ estado_codigo: estado }, { codigo }] } });
+
+      if (result) {
+          const estado = {
+              estado_codigo: true
+          };
+
+          await result.update(estado);
+
+          res.json({ status: 'true', message: 'El código se ha comfirmado con éxito.' })
+      } else {
+          res.json({ status: 'false', message: 'Este código ya no es valido o no existe.' })
+      }
+  } catch (error) {
+      res.status(500).json({
+        message: 'Error generado en la validación del codigo.'});
+  }
+}
 

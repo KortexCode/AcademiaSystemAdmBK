@@ -9,6 +9,8 @@ import { personaModel } from "./persona.model";
 import { aprendizModel } from "./aprendizModel";
 import { profesorModel } from "./profesor.model";
 import { loginModel } from "./login.model";
+import { usersModel } from "./users.model";
+import { codigosModel } from "./codigos.model";
 
 //Creación de la clase server
 export default class Server {
@@ -55,5 +57,7 @@ export default class Server {
     await aprendizModel.sync();
     await profesorModel.sync();
     await loginModel.sync();
+    await usersModel.sync();
+    await codigosModel.sync();
   }
 }

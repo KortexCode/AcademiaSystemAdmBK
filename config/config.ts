@@ -7,6 +7,9 @@ interface ConfigEnv {
   dbPassword: string;
   dbName: string;
   secretPassword: string;
+  email: string;
+  password: string;
+  emailHost: string;
 }
 
 const config: ConfigEnv = {
@@ -15,6 +18,9 @@ const config: ConfigEnv = {
   dbPassword: process.env.SQPASSWORD || "123",
   dbName: process.env.SQBDNAME || "name",
   secretPassword: process.env.SECRETPASSWORD || "secret",
+  email: process.env.EMAIL || "maddison53@ethereal.email",
+  password: process.env.EMAILPASSWORD || "jn7jnAPss4f63QBp6D",
+  emailHost: process.env.EMAILHOST || "smtp.ethereal.email",
 };
 
 export { config };

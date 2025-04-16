@@ -1,6 +1,5 @@
 import { Response, Request } from "express";
 import { personaModel } from "../models/persona.model";
-import { json } from "sequelize";
 
 //Obtener todas las personas
 export const getPersonas = async (req: Request, res: Response) => {

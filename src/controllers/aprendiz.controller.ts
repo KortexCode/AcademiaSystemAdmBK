@@ -1,6 +1,5 @@
 import { Response, Request } from "express";
 import { personaModel } from "../models/persona.model";
-import { json } from "sequelize";
 import { aprendizModel } from "../models/aprendizModel";
 
 //Obtener todos los aprendices
@@ -15,9 +14,19 @@ export const getAprendices = async (req: Request, res: Response) => {
         message: "Búsqueda de aprendices exitosa",
         data: aprendices,
       });
+    } else {
+      res.status(404).json({
+        status: false,
+        message: "No se encontraron aprendices",
+      });
     }
   } catch (error) {
     console.error(error);
+    res.status(500).json({
+      status: false,
+      message: "Error en el servidor al buscar aprendices",
+      error
+    });
   }
 };
 
@@ -40,6 +49,11 @@ export const getAprendiz = async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.error(error);
+    return res.status(500).json({
+      status: false,
+      message: "Error en el servidor al buscar el aprendiz",
+      error
+    });
   }
 };
 
