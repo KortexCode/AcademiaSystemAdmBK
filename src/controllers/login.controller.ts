@@ -142,9 +142,10 @@ export const postUserCreate = async (req: Request, res: Response) => {
   }
 };
 //Actualizar contraseña
-export const putForgotPassword = async (req: Request, res: Response) => {
+export const putPasswordUpdate = async (req: Request, res: Response) => {
   try {
     const { user_name, password } = req.body;
+    console.log('ver', user_name, password);
     //Consultamos si el usuario existe
     const userFounded = await loginModel.findOne({
       where: {
@@ -177,7 +178,7 @@ export const putForgotPassword = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       message: "Error de servidor",
       error,
     });
@@ -186,7 +187,6 @@ export const putForgotPassword = async (req: Request, res: Response) => {
 //Validar usuario
 export const postUserValidate = async (req: Request, res: Response) => {
   const { numero_documento } = req.body;
-  console.log("El numero de documento es: ", numero_documento);
   try {
     const userFounded = await usersModel.findOne({
       where: {
@@ -215,8 +215,7 @@ export const postUserValidate = async (req: Request, res: Response) => {
 export const postEmailValidate = async (req: Request, res: Response) => {
   try {
     const { user_name, fha_genera } = req.body;
-    console.log("username", user_name);
-
+    
     const user: any = await usersModel.findOne({ attributes: ['correo'], where: { numero_documento: user_name } });
     
     if (user) {
@@ -277,10 +276,8 @@ export const postEmailValidate = async (req: Request, res: Response) => {
 //Validar código
 export const postCodeValidate = async (req: Request, res: Response) => {
   try {
-
       const {codigo} = req.body;
       const estado = false;
-      console.log("verificar codigo", codigo);
       const result: any = await codigosModel.findOne({ where: { [Op.and]: [{ estado_codigo: estado }, { codigo }] } });
 
       if (result) {
@@ -299,4 +296,5 @@ export const postCodeValidate = async (req: Request, res: Response) => {
         message: 'Error generado en la validación del codigo.'});
   }
 }
+
 
