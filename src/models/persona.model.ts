@@ -18,6 +18,11 @@ const personaModel = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    identificacion: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
     edad: {
       type: DataTypes.NUMBER,
       allowNull: false,
@@ -33,6 +38,7 @@ const personaModel = sequelize.define(
     correo: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     sexo: {
       type: DataTypes.STRING,
@@ -40,7 +46,7 @@ const personaModel = sequelize.define(
     },
     seguridad_social: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     patologia: {
       type: DataTypes.STRING,

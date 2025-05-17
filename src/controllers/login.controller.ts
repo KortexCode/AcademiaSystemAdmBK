@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { loginModel } from "../models/login.model";
 import { usersModel } from "../models/users.model";
-import { config } from "../../config/config";
+import { config } from "../../config/configDotenv";
 import { generadorCodigos } from "../utils/generador_de_codigos";
 import { transporter } from "../utils/mailer";
 import { codigosModel } from "../models/codigos.model";
@@ -215,9 +215,9 @@ export const postUserValidate = async (req: Request, res: Response) => {
 export const postEmailValidate = async (req: Request, res: Response) => {
   try {
     const { user_name, fha_genera } = req.body;
-    
+
     const user: any = await usersModel.findOne({ attributes: ['correo'], where: { numero_documento: user_name } });
-    
+
     if (user) {
       const codigoGenerado = generadorCodigos.generarCodigo();
 

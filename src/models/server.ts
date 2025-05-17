@@ -4,7 +4,7 @@ import cors from "cors";
 import { Application } from "express";
 import { sequelize } from "../db/connection";
 import { routerApi } from "../routes";
-import { config } from "../../config/config";
+import { config } from "../../config/configDotenv";
 import { personaModel } from "./persona.model";
 import { aprendizModel } from "./aprendizModel";
 import { profesorModel } from "./profesor.model";

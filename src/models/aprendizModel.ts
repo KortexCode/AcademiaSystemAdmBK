@@ -13,17 +13,17 @@ export const aprendizModel = sequelize.define(
     },
     acudiente: {
       type: DataTypes.STRING(50),
-      allowNull: false,
+      allowNull: true,
       defaultValue: "no aplica",
     },
     telefono_acudiente: {
       type: DataTypes.STRING(20),
-      allowNull: false,
+      allowNull: true,
       defaultValue: "no aplica",
     },
     telefono_alt_acudiente: {
       type: DataTypes.STRING(20),
-      allowNull: false,
+      allowNull: true,
       defaultValue: "no aplica",
     },
     ocupacion: {
@@ -32,6 +32,7 @@ export const aprendizModel = sequelize.define(
     },
     estado: {
       type: DataTypes.ENUM("Activo", "Inactivo"),
+      allowNull: false,
     },
     id_aprendiz_persona: {
       type: DataTypes.INTEGER,
