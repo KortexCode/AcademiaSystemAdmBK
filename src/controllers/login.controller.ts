@@ -54,15 +54,15 @@ export const postLoginInit = async (req: Request, res: Response) => {
         });
       }
     } else {
-      res.json({
+      res.status(404).json({
         status: "false",
         message: "El nombre de usuario no existe",
       });
     }
-  } catch (error) {
+  } catch (error:any) {
     res.status(500).json({
-      message: "Error en el servidor, comuniquese con soporte",
-      error,
+      message: "Error en el servidor, comuníquese con soporte",
+      error: error.message,
     });
   }
 };

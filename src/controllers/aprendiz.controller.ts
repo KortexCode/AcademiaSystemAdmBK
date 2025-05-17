@@ -9,23 +9,19 @@ export const getAprendices = async (req: Request, res: Response) => {
       include: "persona",
     });
     if (aprendices) {
-      res.json({
-        status: true,
+      res.status(200).json({
         message: "Búsqueda de aprendices exitosa",
         data: aprendices,
       });
     } else {
       res.status(404).json({
-        status: false,
-        message: "No se encontraron aprendices",
+        message: "No se encontraron registros de aprendices",
       });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      status: false,
-      message: "Error en el servidor al buscar aprendices",
-      error
+      message: "Error en el servidor por favor comunicarse con soporte",
     });
   }
 };

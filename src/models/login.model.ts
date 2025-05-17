@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db/connection";
 
-
 export const loginModel = sequelize.define(
   'login',
   {
@@ -31,4 +30,5 @@ export const loginModel = sequelize.define(
     createdAt: false,
     updatedAt: false,
   },
-)
+);
+

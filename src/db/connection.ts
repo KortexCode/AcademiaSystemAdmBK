@@ -8,3 +8,5 @@ const sequelize = new Sequelize(config.dbName, config.dbHost, dbPassword, {
 });
 
 export { sequelize };
+
+

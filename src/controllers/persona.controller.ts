@@ -6,19 +6,19 @@ export const getPersonas = async (req: Request, res: Response) => {
   try {
     const personas = await personaModel.findAll();
     if (personas) {
-      res.json({
-        status: true,
+      res.status(200).json({
         message: "Búsqueda de personas exitosa",
         data: personas,
       });
     } else {
-      res.json({
-        status: false,
+      res.status(404).json({
         message: "No se encontraron registros de personas",
       });
     }
   } catch (error) {
-    console.error(error);
+    res.status(500).json({
+        message: "Error en el servidor por favor comunicarse con soporte",
+      });
   }
 };
 
